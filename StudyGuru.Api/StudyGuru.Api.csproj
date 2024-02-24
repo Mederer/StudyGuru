@@ -19,4 +19,9 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\StudyGuru.Application\StudyGuru.Application.csproj" />
+      <ProjectReference Include="..\StudyGuru.Infrastructure\StudyGuru.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>
