@@ -2,7 +2,9 @@ namespace StudyGuru.Application.FlashCards;
 
 public interface IFlashCardService
 {
-    Task<IEnumerable<FlashCardResponse>> GetAllFlashCardsAsync();
+    Task<IEnumerable<FlashCardResponse>> GetAllFlashCardsAsync(Guid userId);
     Task<FlashCardResponse?> GetFlashCardByIdAsync(Guid id);
-    Task<FlashCardResponse?> CreateFlashCardAsync(CreateFlashCardRequest request);
+    Task<FlashCardResponse?> CreateFlashCardAsync(Guid userId, CreateFlashCardRequest request);
+    Task<FlashCardResponse?> UpdateFlashCardAsync(UpdateFlashCardRequest request);
+    Task<bool> DeleteFlashCardAsync(Guid id);
 }
