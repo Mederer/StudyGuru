@@ -1,5 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using StudyGuru.Api.Endpoints;
@@ -9,9 +7,6 @@ using StudyGuru.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 const string allowedOrigins = "AllowedOrigins";
-
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -30,26 +25,24 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
-    options.MetadataAddress = "http://localhost:8080/realms/myrealm/.well-known/openid-configuration";
-    options.RequireHttpsMetadata = false;
+    options.Authority = "https://studyguruorg.b2clogin.com/studyguruorg.onmicrosoft.com/B2C_1_SignInSignUp/v2.0/";
+    options.Audience = "53f95087-8c02-4dbc-a3ed-18ba01e77a8f";
     options.MapInboundClaims = false;
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
-        ValidIssuer = "http://localhost:8080/realms/myrealm",
         ValidateAudience = true,
-        ValidAudience = "account",
+        RequireAudience = true,
         ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
     };
 });
 
-JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -62,6 +55,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapFlashCardEndpoints();
-app.MapAIEndpoints();
 
 app.Run();

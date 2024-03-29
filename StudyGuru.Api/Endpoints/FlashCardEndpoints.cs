@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using StudyGuru.Api.Extensions;
 using StudyGuru.Application.FlashCards;
 
 namespace StudyGuru.Api.Endpoints;
@@ -8,9 +10,15 @@ public static class FlashCardEndpoints
     {
         app.MapGet("/flashcards", async (IFlashCardService service, HttpContext context) =>
         {
-            var userId = Guid.Parse(context.User.Claims.FirstOrDefault(x => x.Type == "sub").Value);
-            var flashCards = await service.GetAllFlashCardsAsync(userId);
+            var userId = context.User.GetUserId();
+            if (!userId.HasValue)
+            {
+                return Results.Unauthorized();
+            }
+            
+            var flashCards = await service.GetAllFlashCardsAsync(userId.Value);
             return Results.Ok(flashCards);
+
         }).RequireAuthorization();
         
         app.MapGet("/flashcards/{id}", async (Guid id, IFlashCardService service) =>
@@ -21,8 +29,13 @@ public static class FlashCardEndpoints
 
         app.MapPost("/flashcards", async (CreateFlashCardRequest request, IFlashCardService service, HttpContext context) =>
         {
-            Console.WriteLine($"Sub: {context.User.FindFirst("sub")?.Value}");
-            var newFlashCard = await service.CreateFlashCardAsync(Guid.Parse(context.User.Claims.FirstOrDefault(x => x.Type == "sub").Value), request);
+            var userId = context.User.GetUserId();
+            if (!userId.HasValue)
+            {
+                return Results.Unauthorized();
+            }
+            
+            var newFlashCard = await service.CreateFlashCardAsync(userId.Value, request);
             return newFlashCard is not null
                 ? Results.Created($"/flashcards/{newFlashCard.Id}", newFlashCard)
                 : Results.BadRequest();
