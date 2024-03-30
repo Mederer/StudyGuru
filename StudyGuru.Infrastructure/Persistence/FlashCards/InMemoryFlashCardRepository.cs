@@ -4,7 +4,7 @@ namespace StudyGuru.Infrastructure.Persistence.FlashCards;
 
 public class InMemoryFlashCardRepository : IFlashCardRepository
 {
-    private List<FlashCard> _flashCards = new();
+    private List<FlashCard> _flashCards = [];
 
     public InMemoryFlashCardRepository()
     {
@@ -47,9 +47,9 @@ public class InMemoryFlashCardRepository : IFlashCardRepository
         return Task.FromResult<FlashCard?>(flashCard);
     }
 
-    public Task<bool> DeleteAsync(Guid id)
+    public Task<bool> DeleteAsync(Guid userId, Guid id)
     {
-        var flashCard = _flashCards.FirstOrDefault(x => x.Id == id);
+        var flashCard = _flashCards.FirstOrDefault(x => x.Id == id && x.UserId == userId);
         if (flashCard is null)
         {
             return Task.FromResult(false);

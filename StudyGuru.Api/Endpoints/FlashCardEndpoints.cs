@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using StudyGuru.Api.Extensions;
 using StudyGuru.Application.FlashCards;
 
@@ -41,18 +40,29 @@ public static class FlashCardEndpoints
                 : Results.BadRequest();
         }).RequireAuthorization();
 
-        app.MapPut("/flashcards", async (UpdateFlashCardRequest request, IFlashCardService service) =>
+        app.MapPut("/flashcards", async (UpdateFlashCardRequest request, IFlashCardService service, HttpContext context) =>
         {
+            var userId = context.User.GetUserId();
+            if (!userId.HasValue)
+            {
+                return Results.Unauthorized();
+            }
+            
             var updatedFlashCard = await service.UpdateFlashCardAsync(request);
             return updatedFlashCard is not null
                 ? Results.Ok(updatedFlashCard)
                 : Results.NotFound();
         });
         
-        app.MapDelete("/flashcards/{id}", async (Guid id, IFlashCardService service) =>
+        app.MapDelete("/flashcards/{id}", async (Guid id, IFlashCardService service, HttpContext context) =>
         {
-            var deleted = await service.DeleteFlashCardAsync(id);
+            var userId = context.User.GetUserId();
+            if (!userId.HasValue)
+            {
+                return Results.Unauthorized();
+            }
+            var deleted = await service.DeleteFlashCardAsync(userId.Value, id);
             return deleted ? Results.NoContent() : Results.NotFound();
-        });
+        }).RequireAuthorization();
     }
 }

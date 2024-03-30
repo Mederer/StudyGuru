@@ -13,6 +13,8 @@
     <ItemGroup>
       <PackageReference Include="AWSSDK.Bedrock" Version="3.7.301.43" />
       <PackageReference Include="AWSSDK.BedrockRuntime" Version="3.7.301.43" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     </ItemGroup>
 

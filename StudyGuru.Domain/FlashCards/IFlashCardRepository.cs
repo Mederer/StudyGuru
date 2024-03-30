@@ -7,5 +7,5 @@ public interface IFlashCardRepository
     Task<IEnumerable<FlashCard>> GetAllForUserAsync(Guid userId);
     Task<FlashCard?> CreateAsync(FlashCard flashCard);
     Task<FlashCard?> UpdateAsync(FlashCard flashCard);
-    Task<bool> DeleteAsync(Guid id);
+    Task<bool> DeleteAsync(Guid userId, Guid id);
 }
