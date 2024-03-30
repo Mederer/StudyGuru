@@ -45,8 +45,8 @@ public class FlashCardService : IFlashCardService
         return updatedFlashCard is not null ? new FlashCardResponse(updatedFlashCard.Id, updatedFlashCard.Question, updatedFlashCard.Answer) : null;
     }
 
-    public Task<bool> DeleteFlashCardAsync(Guid id)
+    public Task<bool> DeleteFlashCardAsync(Guid userId, Guid id)
     {
-        return _flashCardRepository.DeleteAsync(id);
+        return _flashCardRepository.DeleteAsync(userId, id);
     }
 }

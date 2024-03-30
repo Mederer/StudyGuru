@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using StudyGuru.Api.Endpoints;
 using StudyGuru.Application;
 using StudyGuru.Infrastructure;
+using StudyGuru.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration.GetSection("Database")["ConnectionString"]!);
 
 builder.Services.AddCors(options =>
 {
@@ -25,8 +26,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
-    options.Authority = "https://studyguruorg.b2clogin.com/studyguruorg.onmicrosoft.com/B2C_1_SignInSignUp/v2.0/";
-    options.Audience = "53f95087-8c02-4dbc-a3ed-18ba01e77a8f";
+    options.Authority = builder.Configuration.GetSection("Jwt")["Authority"];
+    options.Audience = builder.Configuration.GetSection("Jwt")["Audience"];
     options.MapInboundClaims = false;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -43,6 +44,13 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<StudyGuruDbContext>();
+    // dbContext.Database.EnsureDeleted();
+    dbContext.Database.EnsureCreated();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -55,5 +63,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapFlashCardEndpoints();
+app.MapTopicEndpoints();
 
 app.Run();
