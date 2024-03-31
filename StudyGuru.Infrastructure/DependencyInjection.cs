@@ -14,7 +14,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IFlashCardRepository, FlashCardRepository>();
         services.AddScoped<ITopicRepository, TopicRepository>();
-        
+
         services.AddDbContext<StudyGuruDbContext>(options =>
         {
             options.UseSqlServer(connectionString);

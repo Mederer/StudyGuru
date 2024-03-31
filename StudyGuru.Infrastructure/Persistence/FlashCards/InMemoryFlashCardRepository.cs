@@ -8,8 +8,8 @@ public class InMemoryFlashCardRepository : IFlashCardRepository
 
     public InMemoryFlashCardRepository()
     {
-        _flashCards.Add(new FlashCard(Guid.Parse("a6088d10-29b0-4447-8feb-90ccfdc1401c"), "What is the capital of France?", "Paris"));
-        _flashCards.Add(new FlashCard(Guid.Parse("a6088d10-29b0-4447-8feb-90ccfdc1401c"), "What is the capital of Germany?", "Berlin"));
+        // _flashCards.Add(new FlashCard(Guid.Parse("a6088d10-29b0-4447-8feb-90ccfdc1401c"), "What is the capital of France?", "Paris"));
+        // _flashCards.Add(new FlashCard(Guid.Parse("a6088d10-29b0-4447-8feb-90ccfdc1401c"), "What is the capital of Germany?", "Berlin"));
     }
     public Task<FlashCard?> GetByIdAsync(Guid id)
     {
@@ -42,7 +42,7 @@ public class InMemoryFlashCardRepository : IFlashCardRepository
         {
             return Task.FromResult<FlashCard?>(null);
         }
-        
+
         _flashCards[index] = flashCard;
         return Task.FromResult<FlashCard?>(flashCard);
     }
@@ -54,7 +54,7 @@ public class InMemoryFlashCardRepository : IFlashCardRepository
         {
             return Task.FromResult(false);
         }
-        
+
         _flashCards.Remove(flashCard);
         return Task.FromResult(true);
     }

@@ -51,7 +51,7 @@ public class FlashCardRepository : IFlashCardRepository
         {
             return false;
         }
-        
+
         _dbContext.FlashCards.Remove(flashCard);
         await _dbContext.SaveChangesAsync();
         return true;

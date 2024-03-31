@@ -28,4 +28,9 @@ public class TopicRepository : ITopicRepository
         var topics = await _context.Topics.Where(x => x.UserId == userId).ToListAsync();
         return topics.AsEnumerable();
     }
+
+    public async Task<Topic?> GetByIdAsync(Guid userId, Guid id)
+    {
+        return await _context.Topics.Where(x => x.Id == id && x.UserId == userId).FirstOrDefaultAsync();
+    }
 }

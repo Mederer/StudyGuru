@@ -17,9 +17,10 @@ public class TopicService : ITopicService
         return topics.Select(x => new TopicResponse(x.Id, x.Name));
     }
 
-    public Task<TopicResponse?> GetTopicByIdAsync(Guid id)
+    public async Task<TopicResponse?> GetTopicByIdAsync(Guid userId, Guid id)
     {
-        throw new NotImplementedException();
+        var topic = await _topicRepository.GetByIdAsync(userId, id);
+        return topic is not null ? new TopicResponse(topic.Id, topic.Name) : null;
     }
 
     public async Task<TopicResponse?> CreateTopicAsync(Guid userId, CreateTopicRequest request)

@@ -14,12 +14,12 @@ public static class FlashCardEndpoints
             {
                 return Results.Unauthorized();
             }
-            
+
             var flashCards = await service.GetAllFlashCardsAsync(userId.Value);
             return Results.Ok(flashCards);
 
         }).RequireAuthorization();
-        
+
         app.MapGet("/flashcards/{id}", async (Guid id, IFlashCardService service) =>
         {
             var flashCard = await service.GetFlashCardByIdAsync(id);
@@ -33,7 +33,7 @@ public static class FlashCardEndpoints
             {
                 return Results.Unauthorized();
             }
-            
+
             var newFlashCard = await service.CreateFlashCardAsync(userId.Value, request);
             return newFlashCard is not null
                 ? Results.Created($"/flashcards/{newFlashCard.Id}", newFlashCard)
@@ -47,13 +47,13 @@ public static class FlashCardEndpoints
             {
                 return Results.Unauthorized();
             }
-            
+
             var updatedFlashCard = await service.UpdateFlashCardAsync(request);
             return updatedFlashCard is not null
                 ? Results.Ok(updatedFlashCard)
                 : Results.NotFound();
         });
-        
+
         app.MapDelete("/flashcards/{id}", async (Guid id, IFlashCardService service, HttpContext context) =>
         {
             var userId = context.User.GetUserId();

@@ -20,7 +20,7 @@ public static class TopicEndpoints
                 ? Results.Created($"/topics/{newTopic.Id}", newTopic)
                 : Results.BadRequest();
         });
-        
+
         app.MapGet("/topics", async (ITopicService service, HttpContext context) =>
         {
             var userId = context.User.GetUserId();
@@ -28,7 +28,7 @@ public static class TopicEndpoints
             {
                 return Results.Unauthorized();
             }
-            
+
             var topics = await service.GetAllTopicsAsync(userId.Value);
             return Results.Ok(topics);
         }).RequireAuthorization();
