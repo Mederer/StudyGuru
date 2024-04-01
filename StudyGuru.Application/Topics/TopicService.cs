@@ -14,20 +14,21 @@ public class TopicService : ITopicService
     public async Task<IEnumerable<TopicResponse>> GetAllTopicsAsync(Guid userId)
     {
         var topics = await _topicRepository.GetAllAsync(userId);
-        return topics.Select(x => new TopicResponse(x.Id, x.Name));
+        return topics.Select(x => new TopicResponse(x.Id, x.Name, x.Colour));
     }
 
     public async Task<TopicResponse?> GetTopicByIdAsync(Guid userId, Guid id)
     {
         var topic = await _topicRepository.GetByIdAsync(userId, id);
-        return topic is not null ? new TopicResponse(topic.Id, topic.Name) : null;
+        return topic is not null ? new TopicResponse(topic.Id, topic.Name, topic.Colour) : null;
     }
 
     public async Task<TopicResponse?> CreateTopicAsync(Guid userId, CreateTopicRequest request)
     {
-        var newTopic = new Topic(userId, request.Name);
+        Console.WriteLine($"Colour: {request.Colour}");
+        var newTopic = new Topic(userId, request.Name, request.Colour);
         var savedTopic = await _topicRepository.CreateAsync(newTopic);
-        return savedTopic is not null ? new TopicResponse(savedTopic.Id, savedTopic.Name) : null;
+        return savedTopic is not null ? new TopicResponse(savedTopic.Id, savedTopic.Name, savedTopic.Colour) : null;
     }
 
     public Task<TopicResponse?> UpdateTopicAsync(UpdateTopicRequest request)

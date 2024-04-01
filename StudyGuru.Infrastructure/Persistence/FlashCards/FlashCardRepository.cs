@@ -26,7 +26,7 @@ public class FlashCardRepository : IFlashCardRepository
 
     public async Task<IEnumerable<FlashCard>> GetAllForUserAsync(Guid userId)
     {
-        var flashCards = await _dbContext.FlashCards.Where(x => x.UserId == userId).ToListAsync();
+        var flashCards = await _dbContext.FlashCards.Where(x => x.UserId == userId).Include(x => x.Topic).ToListAsync();
         return flashCards.AsEnumerable();
     }
 

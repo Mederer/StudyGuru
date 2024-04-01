@@ -47,8 +47,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<StudyGuruDbContext>();
-    dbContext.Database.EnsureDeleted();
-    dbContext.Database.EnsureCreated();
+    // dbContext.Database.EnsureDeleted();
+    // dbContext.Database.EnsureCreated();
 }
 
 if (app.Environment.IsDevelopment())

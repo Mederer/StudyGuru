@@ -1,3 +1,3 @@
 namespace StudyGuru.Application.Topics;
 
-public record TopicResponse(Guid Id, string Name);
+public record TopicResponse(Guid Id, string Name, string Colour);
